@@ -1,4 +1,4 @@
-import chefLogo from './src/assets/Chef.png';
+import chefLogo from '../src/assets/Chef.png';
 
 export default function Header() {
   return (

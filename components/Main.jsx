@@ -1,11 +1,18 @@
 import React from 'react';
-import IngredientsList from './components/IngredientsList';
-import ClaudeRecipe from './components/ClaudeRecipe';
-import { getRecipeFromMistral } from './ai';
+import IngredientsList from './IngredientsList';
+import ClaudeRecipe from './ClaudeRecipe';
+import { getRecipeFromMistral } from '../ai';
 
 export default function Main() {
   const [ingredients, setIngredients] = React.useState([]);
   const [recipe, setRecipe] = React.useState('');
+  const recipeSection = React.useRef(null);
+
+  React.useEffect(() => {
+    if (recipe && recipeSection.current) {
+      recipeSection.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [recipe]);
 
   async function getRecipe() {
     const recipeMarkdown = await getRecipeFromMistral(ingredients);
@@ -23,12 +30,6 @@ export default function Main() {
     event.target.reset(); // Clear the form input after submission
   }
 
-  /**
-   * Challenge:
-   * Using conditional rendering, only render the new <section> IF
-   * there are ingredients added to the list of ingredients.
-   */
-
   return (
     <main>
       <form onSubmit={addIngredient} className='add-ingredient-form'>
@@ -42,7 +43,11 @@ export default function Main() {
       </form>
 
       {ingredients.length > 0 && (
-        <IngredientsList ingredients={ingredients} getRecipe={getRecipe} />
+        <IngredientsList
+          ref={recipeSection}
+          ingredients={ingredients}
+          getRecipe={getRecipe}
+        />
       )}
       {recipe && <ClaudeRecipe recipe={recipe} />}
     </main>

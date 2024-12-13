@@ -1,6 +1,7 @@
+import { forwardRef } from 'react';
 import PropTypes from 'prop-types';
 
-function IngredientsList(props) {
+const IngredientsList = forwardRef((props, ref) => {
   const ingredientsListItems = props.ingredients.map((ingredient) => (
     <li key={ingredient}>{ingredient}</li>
   ));
@@ -13,7 +14,7 @@ function IngredientsList(props) {
       </ul>
       {props.ingredients.length > 3 && (
         <div className='get-recipe-container'>
-          <div>
+          <div ref={ref}>
             <h3>Ready for a recipe?</h3>
             <p>Generate a recipe from your list of ingredients.</p>
           </div>
@@ -22,7 +23,10 @@ function IngredientsList(props) {
       )}
     </section>
   );
-}
+});
+
+// Adding a display name for better debugging and to satisfy ESLint
+IngredientsList.displayName = 'IngredientsList';
 
 IngredientsList.propTypes = {
   ingredients: PropTypes.arrayOf(PropTypes.string).isRequired, // Array of strings, required
